@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BVC Weather Dashboard - North Screen</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========================================
+           CSS RESET & BASE
+           ======================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            /* Reset body */
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* ========================================
+           SCREEN WRAPPER (The 540x450 Box)
+           ======================================== */
+        #screen-wrapper {
+            width: 540px;
+            height: 450px;
+            
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            
+            background: linear-gradient(45deg, #3278fe 0%, #6077f9 50%, #a370f2 100%);
+            background-size: 100% 100%;
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* ========================================
+           MAIN DASHBOARD CONTAINER
+           ======================================== */
+        .dashboard-container {
+            width: 490px;
+            height: 400px;
+            flex-shrink: 0;
+            padding: 40px;
+            
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ========================================
+           HEADER SECTION
+           ======================================== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-shrink: 0;
+            margin-bottom: 10px;
+        }
+
+        .location-info h1 {
+            font-weight: 700;
+            font-size: 21px;
+            line-height: 1.1;
+            margin-bottom: 12px;           
+        }
+
+        .location-info h2 {
+            font-weight: 400;
+            font-size: 12px;
+            opacity: 0.85;
+            letter-spacing: 0.15px;
+        }
+
+        .branding {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
+        .brought-to-you {
+            font-size: 9px;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        .logo-container {
+            width: 100px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .logo-svg {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        /* ========================================
+           CURRENT WEATHER SECTION
+           ======================================== */
+        .current-weather {
+            display: flex;
+            align-items: center;
+            flex-grow: 1; 
+            justify-content: flex-start;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .main-temp {
+            font-size: 65px;
+            font-weight: 700;
+            line-height: 0.9;            
+        }
+
+        .weather-icon-large {
+            width: 70px;
+            height: 70px;
+            flex-shrink: 0;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .weather-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 3px;
+        }
+
+        .weather-desc {
+            font-size: 16px;
+            font-weight: 600;
+            text-transform: capitalize;
+            line-height: 1.2;
+            letter-spacing: -0.25px;
+        }
+
+        .feels-like {
+            font-size: 11px;
+            font-weight: 300;
+            opacity: 0.85;
+        }
+
+        /* ========================================
+           FORECAST SECTION (Fixed Alignment)
+           ======================================== */
+        .forecast-row {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            gap: 15px;
+            margin-top: auto;
+        }
+
+        .forecast-card {
+            flex: 1;
+            height: 140px;
+            
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            
+            /* UPDATED ALIGNMENT LOGIC */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Centers the whole block vertically */
+            gap: 12px; /* Enforces equal space above and below the icon */
+            padding: 0; /* Let flexbox handle the spacing */
+        }
+
+        .day-name {
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1; /* Remove extra line height space */
+            margin-top: 4px; /* Small nudge to visually balance top heavy fonts */
+        }
+
+        .forecast-icon {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+            display: block; /* Removes inline-block spacing issues */
+        }
+
+        .temps {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            line-height: 1; /* Remove extra line height space */
+        }
+
+        .high-temp {
+            font-size: 17px;
+            font-weight: 700; 
+            line-height: 1;
+        }
+
+        .low-temp {
+            font-size: 14px;
+            font-weight: 400;
+            opacity: 0.75;
+            line-height: 1.5;
+        }
+
+        /* ========================================
+           LOADING & ERROR STATES
+           ======================================== */
+        .loading {
+            opacity: 0.5;
+        }
+
+        .error-message {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 100, 100, 0.2);
+            padding: 8px 15px;
+            border-radius: 10px;
+            font-size: 9px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* ========================================
+           UTILITY CLASSES
+           ======================================== */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="screen-wrapper">
+        <div class="dashboard-container">
+            <header class="header">
+                <div class="location-info">
+                    <h1 id="city-name">Calgary, Alberta</h1>
+                    <h2 id="current-date">Friday, November 28</h2>
+                </div>
+                
+                <div class="branding">
+                    <span class="brought-to-you">Brought to you by</span>
+                    <div class="logo-container">
+                        <img src="icons/logo.svg" 
+                             alt="Bow Valley College" 
+                             class="logo-svg"
+                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 280 99%22%3E%3Crect width=%22280%22 height=%2299%22 fill=%22%23fff%22 opacity=%220.3%22 rx=%2210%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Poppins, sans-serif%22 font-size=%2224%22 font-weight=%22600%22 fill=%22%23fff%22%3EBow Valley%3C/text%3E%3Ctext x=%2250%25%22 y=%2270%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Poppins, sans-serif%22 font-size=%2220%22 fill=%22%23fff%22%3ECollege%3C/text%3E%3C/svg%3E';">
+                    </div>
+                </div>
+            </header>
+
+            <section class="current-weather" role="region" aria-label="Current weather">
+                <div class="main-temp" id="main-temp" aria-label="Current temperature">-10°</div>
+                <img src="icons/day-broken-clouds.svg" 
+                     alt="Weather condition icon" 
+                     id="main-icon" 
+                     class="weather-icon-large"
+                     onerror="this.style.display='none';">
+                
+                <div class="weather-details">
+                    <div class="weather-desc" id="weather-desc">Overcast Clouds</div>
+                    <div class="feels-like" id="feels-like">Feels like -17°</div>
+                </div>
+            </section>
+
+            <section class="forecast-row" id="forecast-container" role="region" aria-label="3-day forecast">
+                <div class="forecast-card loading">
+                    <div class="day-name">Sat</div>
+                    <img src="icons/day-broken-clouds.svg" class="forecast-icon" alt="Weather icon">
+                    <div class="temps">
+                        <div class="high-temp">--°</div>
+                        <div class="low-temp">--°</div>
+                    </div>
+                </div>
+                <div class="forecast-card loading">
+                    <div class="day-name">Sun</div>
+                    <img src="icons/day-broken-clouds.svg" class="forecast-icon" alt="Weather icon">
+                    <div class="temps">
+                        <div class="high-temp">--°</div>
+                        <div class="low-temp">--°</div>
+                    </div>
+                </div>
+                <div class="forecast-card loading">
+                    <div class="day-name">Mon</div>
+                    <img src="icons/day-broken-clouds.svg" class="forecast-icon" alt="Weather icon">
+                    <div class="temps">
+                        <div class="high-temp">--°</div>
+                        <div class="low-temp">--°</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <div class="error-message" id="error-message" role="alert"></div>
+    </div>
+
+    <script>
+        const CONFIG = {
+            API_KEY: '597f4bddb6a3c7f1895b1d7ecaf07912',
+            CITY: 'Calgary',
+            UNITS: 'metric',
+            UPDATE_INTERVAL: 1800000, 
+            RETRY_DELAY: 60000, 
+        };
+
+        const ICON_MAP = {
+            '01d': 'day-clear-sky.svg', '01n': 'night-clear-sky.svg',
+            '02d': 'day-few-clouds.svg', '02n': 'night-few-clouds.svg',
+            '03d': 'day-scattered-clouds.svg', '03n': 'day-scattered-clouds.svg',
+            '04d': 'day-broken-clouds.svg', '04n': 'day-broken-clouds.svg',
+            '09d': 'day-shower-rain.svg', '09n': 'night-rain.svg',
+            '10d': 'day-rain.svg', '10n': 'night-rain.svg',
+            '11d': 'day-thunderstorm.svg', '11n': 'day-thunderstorm.svg',
+            '13d': 'night-snow.svg', '13n': 'night-snow.svg',
+            '50d': 'night-mist.svg', '50n': 'night-mist.svg'
+        };
+
+        function updateBackground() {
+            const hour = new Date().getHours();
+            const isDay = hour >= 8 && hour < 20;
+            const dayGradient = 'linear-gradient(45deg, #3278fe 0%, #6077f9 50%, #a370f2 100%)';
+            const nightGradient = 'linear-gradient(45deg, #133881 0%, #1936a3 50%, #252dcc 100%)';
+            const wrapper = document.getElementById('screen-wrapper');
+            if (wrapper) {
+                wrapper.style.background = isDay ? dayGradient : nightGradient;
+                wrapper.style.backgroundSize = '100% 100%';
+            }
+        }
+
+        function getIconPath(code) { return `icons/${ICON_MAP[code] || 'day-clear-sky.svg'}`; }
+        function getFallbackIcon(code) { return `https://openweathermap.org/img/wn/${code}@4x.png`; }
+        function getFormattedDate(dateObj) { return dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }); }
+        function getDayName(dateObj) { return dateObj.toLocaleDateString('en-US', { weekday: 'short' }); }
+        function formatTemp(temp) { return `${Math.round(temp)}°`; }
+
+        function showError(message) {
+            const errorEl = document.getElementById('error-message');
+            errorEl.textContent = message;
+            errorEl.classList.add('show');
+            setTimeout(() => errorEl.classList.remove('show'), 5000);
+        }
+
+        async function fetchCurrentWeather() {
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${CONFIG.CITY}&units=${CONFIG.UNITS}&appid=${CONFIG.API_KEY}`;
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`Weather API returned ${response.status}`);
+            const data = await response.json();
+            if (data.cod !== 200) throw new Error(`Weather API error: ${data.message || 'Unknown error'}`);
+            return data;
+        }
+
+        async function fetchForecast() {
+            const url = `https://api.openweathermap.org/data/2.5/forecast?q=${CONFIG.CITY}&units=${CONFIG.UNITS}&appid=${CONFIG.API_KEY}`;
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`Forecast API returned ${response.status}`);
+            const data = await response.json();
+            if (data.cod !== "200") throw new Error(`Forecast API error: ${data.message || 'Unknown error'}`);
+            return data.list;
+        }
+
+        async function fetchWeatherData() {
+            try {
+                const [currentWeather, forecastList] = await Promise.all([
+                    fetchCurrentWeather(),
+                    fetchForecast()
+                ]);
+                updateCurrentWeather(currentWeather);
+                updateForecast(forecastList);
+            } catch (error) {
+                console.error(error);
+                showError('Unable to load weather data. Retrying...');
+                setTimeout(fetchWeatherData, CONFIG.RETRY_DELAY);
+            }
+        }
+
+        function updateCurrentWeather(data) {
+            try {
+                const now = new Date();
+                document.getElementById('current-date').textContent = getFormattedDate(now);
+                document.getElementById('city-name').textContent = `${data.name}, Alberta`;
+                document.getElementById('main-temp').textContent = formatTemp(data.main.temp);
+                document.getElementById('weather-desc').textContent = data.weather[0].description;
+                document.getElementById('feels-like').textContent = `Feels like ${formatTemp(data.main.feels_like)}`;
+                
+                const iconCode = data.weather[0].icon;
+                const iconEl = document.getElementById('main-icon');
+                iconEl.src = getIconPath(iconCode);
+                iconEl.style.display = 'block';
+                iconEl.onerror = function() { this.src = getFallbackIcon(iconCode); };
+            } catch (error) { console.error(error); }
+        }
+
+        function updateForecast(forecastList) {
+            try {
+                const dailyData = {};
+                const today = new Date().toISOString().split('T')[0];
+
+                forecastList.forEach(item => {
+                    const date = item.dt_txt.split(' ')[0];
+                    if (date === today) return;
+                    if (!dailyData[date]) { dailyData[date] = { temps: [], icon: item.weather[0].icon }; }
+                    dailyData[date].temps.push(item.main.temp);
+                    if (item.dt_txt.includes("12:00:00")) { dailyData[date].icon = item.weather[0].icon; }
+                });
+
+                const days = Object.keys(dailyData).slice(0, 3);
+                const container = document.getElementById('forecast-container');
+                container.innerHTML = '';
+
+                days.forEach(dayDate => {
+                    const dayInfo = dailyData[dayDate];
+                    const min = Math.round(Math.min(...dayInfo.temps));
+                    const max = Math.round(Math.max(...dayInfo.temps));
+                    const dayName = getDayName(new Date(dayDate + 'T12:00:00'));
+                    const iconSrc = getIconPath(dayInfo.icon);
+                    const fallbackSrc = getFallbackIcon(dayInfo.icon);
+
+                    const card = document.createElement('div');
+                    card.className = 'forecast-card fade-in';
+                    card.innerHTML = `
+                        <div class="day-name">${dayName}</div>
+                        <img src="${iconSrc}" class="forecast-icon" alt="Weather icon for ${dayName}" onerror="this.src='${fallbackSrc}'">
+                        <div class="temps">
+                            <div class="high-temp">${max}°</div>
+                            <div class="low-temp">${min}°</div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) { console.error(error); }
+        }
+
+        fetchWeatherData();
+        updateBackground();
+        setInterval(fetchWeatherData, CONFIG.UPDATE_INTERVAL);
+        setInterval(updateBackground, 60000);
+        console.log(`Weather Dashboard initialized for ${CONFIG.CITY} (Small Mode)`);
+    </script>
+</body>
+</html>
